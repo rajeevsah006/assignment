@@ -1,0 +1,38 @@
+# Disable Directory Browsing
+Options -Indexes +MultiViews
+
+# Default page to display when a directory is accessed
+DirectoryIndex index.php
+
+# Enable mod_rewrite
+RewriteEngine On
+
+# Define the base url for accessing this folder
+RewriteBase /assignment
+
+# Unless directory, remove trailing slash
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)/$ $1 [L,R=301]
+
+# Redirects the index.php file to the root domain
+RewriteCond %{THE_REQUEST} ^.*/index(\.php)? [NC]
+RewriteRule ^(.*)index(\.php)?$ $1 [L,R=301]
+
+# Add extension if the php file exists:
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php [NC,L]
+
+# Redirect external .php requests to extensionless url (only for GET method)
+RewriteCond %{THE_REQUEST} ^GET\ /(.+)\.php [NC]
+RewriteRule ^(.+)\.php$ $1 [L,R=301]
+
+# Redirect to custome error page
+ErrorDocument 400 /assignment/errors
+ErrorDocument 403 /assignment/errors
+ErrorDocument 404 /assignment/errors
+ErrorDocument 405 /assignment/errors
+ErrorDocument 408 /assignment/errors
+ErrorDocument 500 /assignment/errors
+ErrorDocument 502 /assignment/errors
+ErrorDocument 504 /assignment/errors
